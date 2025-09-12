@@ -1,0 +1,6 @@
+# API Keys Configuration
+# IMPORTANT: Replace with your actual API keys
+# DO NOT commit real keys to version control
+
+groq:
+  api-key: ${GROQ_API_KEY:your_groq_api_key_here}
