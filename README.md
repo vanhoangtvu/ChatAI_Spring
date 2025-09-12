@@ -8,7 +8,7 @@
 
 - **Backend**: Spring Boot với JWT authentication, MySQL database
 - **Frontend**: React với TypeScript, Material-UI, real-time streaming
-- **AI Integration**: Groq API với 12 models khác nhau
+- **AI Integration**:  với 12 models khác nhau
 - **Features**: User management, chat history, admin dashboard, request limiting
 
 ## 🏗️ Kiến trúc hệ thống
