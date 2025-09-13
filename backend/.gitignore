@@ -20,7 +20,7 @@ api_key.yml
 ### IntelliJ IDEA ###
 .idea
 *.iws
-*.iml
+*.imlgit
 *.ipr
 
 ### NetBeans ###
