@@ -1,0 +1,41 @@
+# Production Configuration Profile
+spring:
+  # JPA Configuration for Production
+  jpa:
+    hibernate:
+      ddl-auto: validate  # Don't auto-update schema in production
+    show-sql: false       # Don't show SQL in production logs
+    properties:
+      hibernate:
+        format_sql: false # Don't format SQL in production
+  
+  # SQL initialization - disabled in production
+  sql:
+    init:
+      mode: never
+
+# Logging Configuration for Production
+logging:
+  level:
+    root: WARN
+    com.chatai: INFO
+    org.springframework.security: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/spring-ai-chat.log
+
+# Application Configuration for Production
+app:
+  user-limits:
+    default-requests-per-day: 50      # Reduced for production
+    premium-requests-per-day: 500     # Reduced for production
+
+# Groq Configuration for Production
+groq:
+  # Reduced limits for production
+  max-tokens: 500
+  streaming:
+    timeout: 15000    # Reduced timeout
+    chunk-delay: 50   # Faster response

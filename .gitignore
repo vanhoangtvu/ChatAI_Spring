@@ -1,11 +1,45 @@
-# Compiled class files
+# Build artifacts
 *.class
+target/
+build/
+dist/
+out/
+
+# Dependencies
+node_modules/
+.mvn/wrapper/maven-wrapper.jar
 
 # Log files
 *.log
+logs/
 
-# BlueJ files
+# Environment files
+.env.local
+.env.production
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker
+.dockerignore.bak
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+
+# Java specific
 *.ctxt
+hs_err_pid*
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
