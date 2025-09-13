@@ -1,0 +1,158 @@
+server:
+  port: ${SERVER_PORT:8080}
+
+spring:
+  application:
+    name: spring-ai-chat
+  
+  # Database Configuration
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:db_AIchatbot}?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Ho_Chi_Minh&autoReconnect=true&failOverReadOnly=false&maxReconnects=10&useLocalSessionState=true&elideSetAutoCommits=true
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:1111}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # Connection Pool Configuration - Fix connection leaks
+    hikari:
+      maximum-pool-size: 10  # Reduced from 20
+      minimum-idle: 2        # Reduced from 5
+      idle-timeout: 600000   # 10 minutes
+      max-lifetime: 1800000  # 30 minutes
+      connection-timeout: 30000  # 30 seconds
+      leak-detection-threshold: 60000  # 60 seconds - detect connection leaks
+      validation-timeout: 5000
+      connection-test-query: SELECT 1
+      auto-commit: true  # Explicit autocommit
+  
+  # JPA Configuration
+  jpa:
+    hibernate:
+      ddl-auto: update  # Changed from create to update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+        # Connection handling
+        jdbc:
+          batch_size: 20
+        order_inserts: true
+        order_updates: true
+        generate_statistics: false
+    defer-datasource-initialization: true
+  
+  # SQL initialization
+  sql:
+    init:
+      mode: embedded  # Changed from always to embedded
+      continue-on-error: true
+  
+  # Jackson configuration
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    time-zone: Asia/Ho_Chi_Minh
+    default-property-inclusion: non_null
+  
+  # Web Configuration
+  web:
+    resources:
+      cache:
+        cachecontrol:
+          max-age: 120
+  
+  # Thread Pool Configuration  
+  task:
+    execution:
+      pool:
+        core-size: 8
+        max-size: 20
+  
+  # Transaction Configuration
+  transaction:
+    default-timeout: 30  # 30 seconds timeout for transactions
+
+# JWT Configuration
+jwt:
+  secret: ${JWT_SECRET:ZettixTeamAIChatSecretKeyForJWTTokenGenerationVeryLongAndSecure2024}
+  expiration: ${JWT_EXPIRATION:86400000} # 24 hours in milliseconds
+
+# Application Configuration
+app:
+  default-admin:
+    username: admin
+    password: admin123
+    email: admin@zettixteam.com
+  user-limits:
+    default-requests-per-day: 100
+    premium-requests-per-day: 1000
+
+
+# Groq Configuration
+groq:
+  api-key: ${GROQ_API_KEY:your-groq-api-key-here}
+  base-url: https://api.groq.com
+  # Default model (will be overridden by frontend)
+  model: llama-3.1-8b-instant
+  temperature: 0.7
+  max-tokens: 1000
+  # Streaming configuration
+  streaming:
+    buffer-size: 8192
+    timeout: 120000  # Increased to 2 minutes
+    chunk-delay: 50   # Reduced delay for faster streaming
+  # Available models (đồng bộ với database và frontend)
+  available-models:
+    - name: "Llama 3.1 8B Instant"
+      id: "llama-3.1-8b-instant"
+      description: "Fastest model, good for quick responses"
+    - name: "Llama 3.3 70B Versatile"
+      id: "llama-3.3-70b-versatile"
+      description: "Latest Llama model, most capable"
+    - name: "Gemma2 9B"
+      id: "gemma2-9b-it"
+      description: "Google's Gemma2 model, 9B parameters"
+    - name: "DeepSeek R1 Distill"
+      id: "deepseek-r1-distill-llama-70b"
+      description: "DeepSeek's distilled model based on Llama 70B"
+    - name: "Llama 4 Maverick 17B"
+      id: "meta-llama/llama-4-maverick-17b-128e-instruct"
+      description: "Meta's latest Llama 4 model"
+    - name: "Llama 4 Scout 17B"
+      id: "meta-llama/llama-4-scout-17b-16e-instruct"
+      description: "Meta's Scout model for instruction following"
+    - name: "Qwen 3 32B"
+      id: "qwen/qwen3-32b"
+      description: "Alibaba's Qwen model, 32B parameters"
+    - name: "Kimi K2 Instruct"
+      id: "moonshotai/kimi-k2-instruct"
+      description: "Moonshot AI's Kimi model"
+    - name: "Compound Beta"
+      id: "groq/compound"
+      description: "Compound AI's beta model"
+    - name: "Compound Beta Mini"
+      id: "groq/compound-mini"
+      description: "Compound AI's smaller beta model"
+    - name: "GPT-OSS 20B"
+      id: "openai/gpt-oss-20b"
+      description: "OpenAI's open source model, 20B parameters"
+    - name: "GPT-OSS 120B"
+      id: "openai/gpt-oss-120b"
+      description: "OpenAI's open source model, 120B parameters"
+
+# Logging Configuration
+logging:
+  level:
+    root: INFO
+    com.chatai: INFO
+    com.chatai.service.GroqService: INFO
+    com.chatai.controller.ChatController: INFO
+    com.chatai.security.AuthTokenFilter: DEBUG
+    # Connection pool monitoring
+    com.zaxxer.hikari: DEBUG
+    # Uncomment below for debugging
+    # com.chatai: DEBUG
+    # com.chatai.service.GroqService: DEBUG
+    # com.chatai.controller.ChatController: DEBUG
+    # org.springframework.web.reactive.function.client: DEBUG
+    # reactor.netty: DEBUG
+
